@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% block title %}
+      <title>My Blog</title>
+    {% endblock %}
+  </head>
+  <body>
+    {% block sidebar %}
+      <a href="{% url 'blog' %}">Home</a>
+    {% endblock %}
+    {% block content %}
+      <!-- default content text (typically empty) -->
+    {% endblock %}
+  </body>
+</html>

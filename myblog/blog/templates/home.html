@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Welcome to my blog</h1>
+<p>{{ posts }}</p>
+<p>{{ num_posts }}</p>
+
+{% load static %}
+<img
+src="{% static 'image/bnbn.jpeg' %}"
+alt="My image"
+style="width:555px;height:540px;" />
+{% endblock %}
