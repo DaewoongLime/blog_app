@@ -36,7 +36,7 @@ class Comment(models.Model):
         
     def __str__(self):
         # String for representing the Model object.
-        return self.title
+        return str(self.post)+" "+self.writer
     
     def get_absolute_url(self):
         # Returns the URL to access a detail record for this book.
