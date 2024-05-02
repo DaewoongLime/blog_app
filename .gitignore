@@ -2,3 +2,4 @@
 myblog/.DS_Store
 myblog/myblog/__pycache__
 myblog/blog/__pycache__
+myblog/blog/migrations/__pycache__
