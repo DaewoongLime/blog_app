@@ -8,9 +8,18 @@
   </p>
   <h2>Dynamic content</h2>
   <p>View our recent posts:</p>
-  <ul>
-    <li><strong>1:</strong> {{ num_posts }}</li>
-  </ul>
+    {% if posts %}
+    <ul>
+      {% for post in posts %}
+      <li>
+        <strong><a href="">{{ post.title }}</a></strong>
+        ({{post.writer}})
+      </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>There are no posts written yet.</p>
+  {% endif %}
 
   {% load static %}
     <img
