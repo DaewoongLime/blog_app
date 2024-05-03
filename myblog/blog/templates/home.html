@@ -1,13 +1,20 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Welcome to my blog</h1>
-<p>{{ posts }}</p>
-<p>{{ num_posts }}</p>
+  <h1>My Blog Home</h1>
+  <p>
+    Welcome to My Blog, a website developed by
+    <em>Me</em>!
+  </p>
+  <h2>Dynamic content</h2>
+  <p>View our recent posts:</p>
+  <ul>
+    <li><strong>1:</strong> {{ num_posts }}</li>
+  </ul>
 
-{% load static %}
-<img
-src="{% static 'image/bnbn.jpeg' %}"
-alt="My image"
-style="width:555px;height:540px;" />
+  {% load static %}
+    <img
+    src="{% static 'image/bnbn.jpeg' %}"
+    alt="My image"
+    style="width:555px;height:540px;" />
 {% endblock %}
