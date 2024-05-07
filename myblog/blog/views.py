@@ -24,3 +24,9 @@ class PostDetailView(generic.DetailView):
     model = Post
     context_object_name = 'post'
     template_name = 'post.html'
+
+class CommentListView(generic.ListView):
+    model = Comment
+    context_object_name = 'comments'
+    template_name = 'comments.html'
+    

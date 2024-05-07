@@ -11,11 +11,14 @@
     <!-- show comments -->
     <div style="margin-left:20px;margin-top:20px">
         <h4>Comments</h4>
-        
-        {% for comment in post.comment_set.all %}
-          <hr />
-          <p> {{comment.content}} - {{comment.writer}}</p>
-          </p>
-        {% endfor %}
+        {% if post.comment_set.all %}
+          {% for comment in post.comment_set.all %}
+            <hr />
+            <p> {{comment.content}} - {{comment.writer}}</p>
+          {% endfor %}
+          <p><a href="comments/">See all comments</a></p>
+        {% else %}
+          <p>No comments yet.</p>
+        {% endif %}
       </div>
 {% endblock %}
