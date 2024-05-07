@@ -18,3 +18,8 @@ class PostListView(generic.ListView):
     context_object_name = 'posts'   # your own name for the list as a template variable
     # queryset = Post.objects.filter(title__icontains='war')[:5] # Get 5 books containing the title war
     template_name = 'home.html'  # Specify your own template name/location
+
+class PostDetailView(generic.DetailView):
+    model = Post
+    context_object_name = 'post'
+    template_name = 'post.html'

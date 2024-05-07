@@ -12,7 +12,7 @@
     <ul>
       {% for post in posts %}
       <li>
-        <strong><a href="">{{ post.title }}</a></strong>
+        <strong><a href="{{post.id}}">{{ post.title }}</a></strong>
         ({{post.writer}})
       </li>
       {% endfor %}
