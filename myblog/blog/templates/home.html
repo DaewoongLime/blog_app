@@ -1,20 +1,27 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h1>My Blog Home</h1>
+  <h1 style="margin-top: 20px;">My Blog Home</h1>
   <p>
     Welcome to My Blog, a website developed by
     <em><a href="https://github.com/DaewoongLime">Me</a></em>!
   </p>
   <hr />
-  <p>View our recent posts:</p>
     {% if posts %}
+    <h2>Recent Posts:</h2>
     <ul>
       {% for post in posts %}
-      <li>
-        <strong><a href="{{post.id}}">{{ post.title }}</a></strong>
-        ({{post.writer}})
-      </li>
+      <div style="margin-top:20px">  
+        <h4><a href="{{post.id}}">{{ post.title }}</a></h4>
+        <p  style="white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;">
+        (<strong>{{post.writer}}</strong>)
+        {{ post.content }}...
+        </p>
+        <hr />
+      </div>
       {% endfor %}
     </ul>
   {% else %}

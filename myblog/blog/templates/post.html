@@ -1,19 +1,19 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1> {{post.title}} </h1>
+    <h1 style="margin-top: 20px;"> {{post.title}} </h1>
     <p> by <em>{{post.writer}}</em></p>
 
     <hr />
-    <p>{{post.content}}</p>
+    <p style="min-height: 500px;">{{post.content}}</p>
 
     <hr />
     <!-- show comments -->
     <div style="margin-left:20px;margin-top:20px">
         <h4>Comments</h4>
         {% if post.comment_set.all %}
+          <hr />
           {% for comment in post.comment_set.all %}
-            <hr />
             <p> {{comment.content}} - {{comment.writer}}</p>
           {% endfor %}
           <p><a href="comments/">See all comments</a></p>
