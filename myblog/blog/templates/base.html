@@ -26,10 +26,13 @@
           {% block sidebar %}
             <ul class="sidebar-nav">
               <li><a href="{% url 'home' %}">Home</a></li>
-              <li><a href="">Login</a></li>
-              <li><a href="">Logout</a></li>
-              <li><a href="">My Blog</a></li>
-              <li><a href="">Write Blog</a></li>
+              {% if user.is_authenticated %}
+                <li><a href="{% url 'logout' %}">Logout</a></li>
+                <li><a href="">My Blog</a></li>
+                <li><a href="">Write Blog</a></li>
+              {% else %}
+                <li><a href="{% url 'login' %}">Login</a></li>
+              {% endif %}
               <li><a href="">Search Post</a></li>
             </ul>
           {% endblock %}
