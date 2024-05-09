@@ -28,6 +28,9 @@ class PostDetailView(generic.DetailView):
 class CommentListView(generic.ListView):
     model = Comment
     context_object_name = 'comments'
-    # queryset = Comment.objects.filter(post='')
+
+    def get_queryset(self):
+        return Comment.objects.filter(post=self.kwargs['pk'])
+
     template_name = 'comments.html'
     
