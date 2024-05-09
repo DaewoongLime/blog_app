@@ -1,13 +1,15 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Comments: </h1>
+    <h1>Comments</h1>
     <hr />
 
-    <div style="margin-left:20px;margin-top:20px">  
+    <div style="margin-left:20px;margin-top:20px;margin-right:20px;">  
         {% if comments %}      
             {% for comment in comments %}
-                <p> {{comment.content}} - {{comment.writer}} </p>
+                <p style="display: inline;"><em>{{comment.writer}}</em> ({{comment.date}}) </p>
+                <p style="display: inline; float: right;"> add buttons too {{comment.likes}} {{comment.dislikes}}</p>
+                <p> {{comment.content}} </p>
                 <hr />
             {% endfor %}
         {% else %}

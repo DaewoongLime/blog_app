@@ -2,18 +2,17 @@
 
 {% block content %}
     <h1 style="margin-top: 20px;"> {{post.title}} </h1>
-    <p> by <em>{{post.writer}}</em></p>
-
+    <p> by <strong><em>{{post.writer}}</em></strong> on <em>{{post.date}}</em> </p>
     <hr />
     <p style="min-height: 500px;">{{post.content}}</p>
-
+    <div style="text-align: center;">Here should be a like button and number of likes</div>
     <hr />
     <!-- show comments -->
     <div style="margin-left:20px; margin-top:20px">
         <h4>Comments</h4>
         {% if post.comment_set.all %}
           <hr />
-          {% for comment in post.comment_set.all %}
+          {% for comment in post.comment_set.all|slice:":5" %}
             <p> {{comment.content}} - {{comment.writer}}</p>
           {% endfor %}
           <p><a href="comments/">See all comments</a></p>
