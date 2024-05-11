@@ -18,7 +18,7 @@ class Post(models.Model):
         return self.title
     
     def get_absolute_url(self):
-        return reverse('blog-detail', args=[str(self.id)])
+        return reverse('post', args=[str(self.id)])
 
 class Comment(models.Model):
     # model representing a comment
@@ -36,6 +36,3 @@ class Comment(models.Model):
     def __str__(self):
         # String for representing the Model object.
         return str(self.post)+" "+self.writer
-    
-    def get_absolute_url(self):
-        return reverse('comment-detail', args=[str(self.id)])

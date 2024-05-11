@@ -18,6 +18,13 @@ class PostDetailView(generic.DetailView):
     context_object_name = 'post'
     template_name = 'view_post.html'
 
+    def get_context_data(self, **kwargs):
+        context = super(PostDetailView, self).get_context_data(**kwargs)
+        id = int(self.kwargs.get('pk'))
+        comments = Comment.objects.filter(post=id).order_by('-likes', 'dislikes')[:5]
+        context['comments'] = comments
+        return context
+
 class CommentListView(generic.ListView):
     model = Comment
     context_object_name = 'comments'
@@ -29,9 +36,6 @@ class CommentListView(generic.ListView):
 
 @login_required
 def write_post(request):
-
-    print(request.user)
-
     # If this is a POST request then process the Form data
     if request.method == 'POST':
         form = WritePostForm(request.POST)
@@ -40,11 +44,9 @@ def write_post(request):
             post = Post(title=form.cleaned_data['title'], writer=request.user, content=form.cleaned_data['content'])
             post.save()
 
-        # return to some page alerting completion
-        return HttpResponseRedirect(reverse('home'))
+        # return to show the post
+        return HttpResponseRedirect(reverse('post', args=[post.id]))
     else:
         form = WritePostForm()
 
-    context = {'form':form}
-
-    return render(request, 'write_post.html', context=context)
+    return render(request, 'write_post.html', context={'form':form})

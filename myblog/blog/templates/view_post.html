@@ -9,15 +9,43 @@
     <hr />
     <!-- show comments -->
     <div style="margin-left:20px; margin-top:20px">
-        <h4>Comments</h4>
-        {% if post.comment_set.all %}
-          <hr />
-          {% for comment in post.comment_set.all|slice:":5" %}
-            <p> {{comment.content}} - {{comment.writer}}</p>
-          {% endfor %}
-          <p><a href="comments/">See all comments</a></p>
-        {% else %}
-          <p>No comments yet.</p>
-        {% endif %}
-      </div>
+      <h4>Comments</h4>
+      {% if comments %}
+        <hr />
+        {% for comment in comments %}
+          <p style="display: inline;"<strong>{{comment.writer}}</strong>: {{comment.content}}</p>
+          <p style="display: inline; float: right;"> {{comment.likes}} {{comment.dislikes}}</p>
+          <p></p>
+        {% endfor %}
+        <p><a href="comments/">See all comments</a></p>
+      {% else %}
+        <p>No comments yet.</p>
+      {% endif %}
+
+      {% if user.is_authenticated %}
+        <a href="#" class="hide">Write Comment</a>
+        <div>
+          <form action="" method="post" id="form" style="display: none;">
+            {% csrf_token %}
+            <table>
+            {{ form.as_table }}
+            </table>
+            <input type="submit" value="Submit">
+          </form>
+        </div>
+        <script>
+          var link = document.getElementsByClassName("hide");
+          link[0].addEventListener("click", function() {
+            if (form.style.display === "block") {
+              form.style.display = "none";
+            } else {
+              form.style.display = "block";
+            }
+          });
+        </script>
+      {% else %}
+        <a href="{% url 'login' %}">Login to Leave a Comment</a>
+      {% endif %}
+    </div>
+
 {% endblock %}
