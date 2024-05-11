@@ -5,11 +5,37 @@
     <p> by <strong><em>{{post.writer}}</em></strong> on <em>{{post.date}}</em> </p>
     <hr />
     <p style="min-height: 500px;">{{post.content}}</p>
-    <div style="text-align: center;">Here should be a like button and number of likes</div>
+    <div style="text-align: center;">Here should be a like button {{post.likes}}</div>
     <hr />
     <!-- show comments -->
     <div style="margin-left:20px; margin-top:20px">
       <h4>Comments</h4>
+
+      {% if user.is_authenticated %}
+      <a href="#" class="hide">Write Comment</a>
+      <div>
+        <form action="" method="post" id="form" style="display: none;">
+          {% csrf_token %}
+          <table>
+          {{ form.as_table }}
+          </table>
+          <input type="submit" value="Submit">
+        </form>
+      </div>
+      <script>
+        var link = document.getElementsByClassName("hide");
+        link[0].addEventListener("click", function() {
+          if (form.style.display === "block") {
+            form.style.display = "none";
+          } else {
+            form.style.display = "block";
+          }
+        });
+      </script>
+    {% else %}
+      <a href="{% url 'login' %}">Login to Leave a Comment</a>
+    {% endif %}
+    
       {% if comments %}
         <hr />
         {% for comment in comments %}
@@ -20,31 +46,6 @@
         <p><a href="comments/">See all comments</a></p>
       {% else %}
         <p>No comments yet.</p>
-      {% endif %}
-
-      {% if user.is_authenticated %}
-        <a href="#" class="hide">Write Comment</a>
-        <div>
-          <form action="" method="post" id="form" style="display: none;">
-            {% csrf_token %}
-            <table>
-            {{ form.as_table }}
-            </table>
-            <input type="submit" value="Submit">
-          </form>
-        </div>
-        <script>
-          var link = document.getElementsByClassName("hide");
-          link[0].addEventListener("click", function() {
-            if (form.style.display === "block") {
-              form.style.display = "none";
-            } else {
-              form.style.display = "block";
-            }
-          });
-        </script>
-      {% else %}
-        <a href="{% url 'login' %}">Login to Leave a Comment</a>
       {% endif %}
     </div>
 
