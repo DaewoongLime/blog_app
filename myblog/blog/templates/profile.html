@@ -21,7 +21,7 @@
             </div>
         {% endfor %}
         {% if posts.count > 5 %}
-            <a href="">See All</a>
+            <a href="{% url 'show-all' name 'posts' %}">See All</a>
         {% endif %}
     {% else %}
         <p>No posts yet.</p>
@@ -31,7 +31,7 @@
     {% if comments %}
         {% for comment in comments|slice:"5" %}
             <div style="margin-top: 20px;">  
-                <p>{{ comment.content }} <a href="{% url 'comments' comment.post.id %}"> See List</a></p>
+                <p>{{comment.content}} on <a href="{% url 'post' comment.post.id %}">{{comment.post}}</a> <a href="{% url 'comments' comment.post.id %}"> See List</a></p>
                 <p  style="white-space: nowrap; overflow: hidden; max-width: 100%;">
                 {{comment.date}} ({{comment.likes}}) ({{comment.dislikes}})
                 </p>
@@ -42,7 +42,7 @@
             </div>
         {% endfor %}
         {% if comments.count > 5 %}
-            <a href="">See All</a>
+            <a href="{% url 'show-all' name 'comments' %}">See All</a>
     {% endif %}
     {% else %}
         <p>No comments yet.</p>

@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>{{model}}</h1>
+    <hr />
+    {% if objects %}
+        {% for x in objects %}
+            {% if model == "Comments" %}
+                <div style="margin-top: 20px;">  
+                    <p>{{x.content}} on <a href="{% url 'post' x.post.id %}">{{x.post}}</a> <a href="{% url 'comments' x.post.id %}"> See List</a></p>
+                    <p  style="white-space: nowrap; overflow: hidden; max-width: 100%;">
+                    {{x.date}} ({{x.likes}}) ({{x.dislikes}})
+                    </p>
+                    {% if auth %}
+                        <a href="">Edit Comment</a>
+                        <a href="{% url 'delete' x.id 'comment' %}" onclick="return confirm('Are you sure? This action is irreversible.')">Delete Comment</a>
+                    {% endif %}
+                </div>
+            {% endif %}
+            {% if model == "Posts" %}
+                <div style="margin-top: 20px;">  
+                    <h4><a href="{% url 'post' x.id %}">{{x.title}}</a></h4>
+                    <p  style="white-space: nowrap; overflow: hidden; max-width: 100%;">
+                    {{x.date}} ({{x.likes}})
+                    </p>
+                    {% if auth %}
+                        <a href="">Edit Post</a>
+                        <a href="{% url 'delete' x.id 'post' %}" onclick="return confirm('Are you sure? This action is irreversible.')">Delete Post</a>
+                    {% endif %}
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        <p>No {{model}} yet.</p>
+    {% endif %}
+{% endblock %}

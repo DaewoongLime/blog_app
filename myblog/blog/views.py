@@ -95,7 +95,28 @@ def delete(request, pk, model):
         elif model == 'comment':
             comment = Comment.objects.get(id=pk, writer=request.user.username)
             comment.delete()
+        else:
+            raise Http404("Invalid Request.") 
     except:
-        raise Http404("No Field to Delete.") 
+        raise Http404("Invalid Request.") 
 
     return render(request, 'deleted_successfully.html')
+
+def show_all(request, user, model):
+    context = {'auth':False}
+    if user == request.user.username:
+        context['auth'] = True
+    try:
+        if model == 'posts':
+            context['model'] = 'Posts'
+            context['objects'] = Post.objects.filter(writer=user)
+        elif model == 'comments':
+            context['model'] = 'Comments'
+            context['objects'] = Comment.objects.filter(writer=user)
+        else:
+            raise Http404("Invalid Request.") 
+    except:
+        raise Http404("Invalid Request.") 
+
+    return render(request, 'show_all.html', context=context)
+    
