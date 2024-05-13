@@ -68,8 +68,7 @@ def write_post(request):
 
     return render(request, 'write_post.html', context={'form':form})
 
-@login_required
-def my_page(request):
+def profile(request, user):
     context = {}
 
-    return render(request, 'my_page.html', context=context)
+    return render(request, 'profile.html', context=context)
