@@ -1,9 +1,9 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponseRedirect
+from django.contrib.auth import get_user_model
+from django.shortcuts import render
+from django.http import HttpResponseRedirect, Http404
 from django.urls import reverse
 from django.views import generic
-from django.views.generic.edit import FormMixin
 from .models import *
 from .forms import *
 
@@ -69,6 +69,19 @@ def write_post(request):
     return render(request, 'write_post.html', context={'form':form})
 
 def profile(request, user):
-    context = {}
+    try:
+        get_user_model().objects.get(username=user)
+    except:
+        raise Http404("Profile does not Exist.") 
+
+    context = {
+        'name':user,
+        'posts':Post.objects.filter(writer=user),
+        'comments':Comment.objects.filter(writer=user),
+        'auth':False,
+    }
+
+    if user == request.user.username:
+        context['auth'] = True
 
     return render(request, 'profile.html', context=context)
