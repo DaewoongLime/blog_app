@@ -2,7 +2,7 @@
 
 {% block content %}
     <h1 style="margin-top: 20px;">{{post.title}}</h1>
-    <p> by <strong><em>{{post.writer}}</em></strong> on <em>{{post.date}}</em> </p>
+    <p> by <strong><em><a href="{% url 'user-profile' post.writer %}">{{post.writer}}</a></em></strong> on <em>{{post.date}}</em> </p>
     <hr />
     <p style="min-height: 500px;">{{post.content}}</p>
     <div style="text-align: center;">Here should be a like button {{post.likes}}</div>
@@ -39,7 +39,7 @@
       {% if comments %}
         <hr />
         {% for comment in comments %}
-          <p style="display: inline;"<strong>{{comment.writer}}</strong>: {{comment.content}}</p>
+          <p style="display: inline;"><a href="{% url 'user-profile' comment.writer %}"><strong>{{comment.writer}}</strong></a>: {{comment.content}}</p>
           <p style="display: inline; float: right;"> {{comment.likes}} {{comment.dislikes}}</p>
           <p></p>
         {% endfor %}

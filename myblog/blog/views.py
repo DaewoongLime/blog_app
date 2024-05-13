@@ -85,3 +85,17 @@ def profile(request, user):
         context['auth'] = True
 
     return render(request, 'profile.html', context=context)
+
+@login_required
+def delete(request, pk, model):
+    try:
+        if model == 'post':
+            post = Post.objects.get(id=pk, writer=request.user.username)
+            post.delete()
+        elif model == 'comment':
+            comment = Comment.objects.get(id=pk, writer=request.user.username)
+            comment.delete()
+    except:
+        raise Http404("No Field to Delete.") 
+
+    return render(request, 'deleted_successfully.html')
