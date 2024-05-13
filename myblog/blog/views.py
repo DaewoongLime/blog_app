@@ -3,15 +3,15 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views import generic
+from django.views.generic.edit import FormMixin
 from .models import *
 from .forms import *
 
 class PostListView(generic.ListView):
-    model = Post
-    context_object_name = 'posts'   # your own name for the list as a template variable
-    # queryset = Post.objects.filter(title__icontains='war')[:5] # Get 5 books containing the title war
-    template_name = 'home.html'  # Specify your own template name/location
-    paginate_by = 5
+    model = Post # Set reference model
+    context_object_name = 'posts' # Set name used in template for model reference
+    template_name = 'home.html' # Specify template name and directory
+    paginate_by = 5 # Default pagination tool
 
 class PostDetailView(generic.DetailView):
     model = Post
@@ -19,20 +19,38 @@ class PostDetailView(generic.DetailView):
     template_name = 'view_post.html'
 
     def get_context_data(self, **kwargs):
+        # Inherit previous get_context_data function
         context = super(PostDetailView, self).get_context_data(**kwargs)
-        id = int(self.kwargs.get('pk'))
-        comments = Comment.objects.filter(post=id).order_by('-likes', 'dislikes')[:5]
+        # Filter comments to show in respective posts
+        comments = Comment.objects.filter(post=int(self.kwargs.get('pk')))
+        # Show only the top 5 comments sorted by number of likes
+        comments.order_by('-likes')[:5]
         context['comments'] = comments
+        # Form for adding new comments
+        context['form'] = LeaveCommentForm()
         return context
+    
+    def post(self, request, *args, **kwargs):
+        if request.method == 'POST':
+            form = LeaveCommentForm(request.POST)
+            if form.is_valid():
+                id = int(self.kwargs.get('pk'))
+                comment = Comment(
+                    post=Post.objects.get(id=id), 
+                    writer=request.user, 
+                    content=form.cleaned_data['content']
+                    )
+                comment.save()
+
+                return HttpResponseRedirect(reverse('post', args=[id]))
 
 class CommentListView(generic.ListView):
     model = Comment
     context_object_name = 'comments'
-
-    def get_queryset(self):
-        return Comment.objects.filter(post=self.kwargs['pk'])
-
     template_name = 'comments.html'
+
+    def get_queryset(self): 
+        return Comment.objects.filter(post=self.kwargs['pk'])
 
 @login_required
 def write_post(request):
@@ -43,10 +61,15 @@ def write_post(request):
             # create post object and save
             post = Post(title=form.cleaned_data['title'], writer=request.user, content=form.cleaned_data['content'])
             post.save()
-
         # return to show the post
         return HttpResponseRedirect(reverse('post', args=[post.id]))
     else:
         form = WritePostForm()
 
     return render(request, 'write_post.html', context={'form':form})
+
+@login_required
+def my_page(request):
+    context = {}
+
+    return render(request, 'my_page.html', context=context)
