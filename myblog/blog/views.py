@@ -165,4 +165,15 @@ def like(request, model, id, like):
     except:
         raise Http404("Invalid Request.") 
 
-    
+def search(request):
+    context = {}
+    posts = []
+    if request.method == 'POST':
+        q = request.POST.get('search_query').split()
+        context['keywords'] = ", ".join(q)
+        for x in q:
+            for post in Post.objects.all():
+                if (x in post.title or x in post.writer) and post not in posts: 
+                    posts.append(post)
+    context['posts'] = posts
+    return render(request, 'search.html', context=context)

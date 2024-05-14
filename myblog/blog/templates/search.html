@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Search Results:</h1>
+<p>Keywords: {{keywords}}</p>
+<hr />
+
+
+{% if posts %}
+<ul>
+  {% for post in posts %}
+  <div style="margin-top:20px">  
+    <h4><a href="{% url 'post' post.id %}">{{ post.title }}</a></h4>
+    <p  style="white-space: nowrap; overflow: hidden; max-width: 100%;">
+      {{post.date}} ({{post.likes}})
+    </p>
+    <p  style="white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;">
+      <strong>{{post.writer}}</strong> - {{ post.content }}
+    </p>
+    <hr />
+  </div>
+  {% endfor %}
+</ul>
+{% else %}
+<p>Nothing found</p>
+{% endif %}
+
+<script>
+    search.style.display = "block";
+</script>
+{% endblock %}

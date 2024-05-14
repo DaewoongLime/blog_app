@@ -33,7 +33,17 @@
               {% else %}
                 <li><a href="{% url 'login' %}">Login</a></li>
               {% endif %}
-              <li><a href="">Search Post</a></li>
+              <li>
+                <a href="#" class="hid">Search Post</a>
+                  <form action="/blog/search/" method="post" id="search" style="display: none;">
+                    {% csrf_token %}
+                    <input type="search"
+                    placeholder="Type Keywords"
+                    name="search_query"
+                    required aria-label="Search">
+                    <input type="submit" value="Submit">
+                  </form>
+              </li>
             </ul>
           {% endblock %}
 
@@ -67,4 +77,15 @@
       </div>
     </div>
   </body>
+
+  <script>
+    var link = document.getElementsByClassName("hid");
+    link[0].addEventListener("click", function() {
+      if (search.style.display === "block") {
+        search.style.display = "none";
+      } else {
+        search.style.display = "block";
+      }
+    });
+  </script>
 </html>
