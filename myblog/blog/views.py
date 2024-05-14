@@ -119,4 +119,38 @@ def show_all(request, user, model):
         raise Http404("Invalid Request.") 
 
     return render(request, 'show_all.html', context=context)
+
+@login_required
+def like(request, model, id):
+    try:
+        if model == "post":
+            post = Post.objects.get(id=id)
+            try: 
+                post_like = PostLike.objects.get(post=post, user=request.user)
+                if post_like.like: post_like.like = False
+                else: post_like.like = True
+                post_like.save()
+            except:
+                post_like = PostLike(post=post, user=request.user)
+                post_like.save()
+            post.likes = PostLike.objects.filter(post=post, like=True).count()
+            post.save()
+            return  HttpResponseRedirect(reverse('post', args=[id]))
+
+        # elif model == "comment":
+        #     comment = Comment.objects.get(id=id)
+        #     try:
+        #         CommentLike.objects.get(comment=comment, user=request.user)
+        #         if 
+        #     except:
+        #         comment_like = CommentLike(comment=comment, user=request.user)
+        #         if like == 1: comment_like.like = 1
+        #         elif
+        #         comment_like.save()
+        #     return  HttpResponseRedirect(reverse('post', args=[comment.post.id]))
+        # else:
+        #   raise Http404("Invalid Request.")
+    except:
+        raise Http404("Invalid Request.") 
+
     

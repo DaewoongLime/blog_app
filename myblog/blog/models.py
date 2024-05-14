@@ -1,4 +1,6 @@
+from django.contrib.auth.models import User
 from django.db import models
+from django.db.models import Count, Q
 from django.urls import reverse # Used in get_absolute_url() to get URL for specified ID
 from datetime import datetime    
 
@@ -36,3 +38,17 @@ class Comment(models.Model):
     def __str__(self):
         # String for representing the Model object.
         return str(self.post)+" "+self.writer
+
+class PostLike(models.Model):
+    # model representing post likes
+    id = models.BigAutoField(help_text="Post Like ID", primary_key=True)
+    post = models.ForeignKey("Post", on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    like = models.BooleanField(default=True)
+
+class CommentLike(models.Model):
+    # model representing comment likes
+    id = models.BigAutoField(help_text="Comment Like ID", primary_key=True)
+    comment = models.ForeignKey("Comment", on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    like = models.IntegerField()
