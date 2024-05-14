@@ -8,7 +8,16 @@
         {% if comments %}      
             {% for comment in comments %}
                 <p style="display: inline;"><em>{{comment.writer}}</em> ({{comment.date}}) </p>
-                <p style="display: inline; float: right;"> add buttons too {{comment.likes}} {{comment.dislikes}}</p>
+                <div style="display: inline; float: right;"> 
+                    <form action="{% url 'like' 'comment' comment.id '1' %}" method="POST">
+                      {% csrf_token %}
+                      <button>👍 {{comment.likes}}</button>
+                    </form>
+                    <form action="{% url 'like' 'comment' comment.id '0' %}" method="POST">
+                      {% csrf_token %}
+                      <button>👎 {{comment.dislikes}}</button>
+                    </form>
+                  </div>
                 <p> {{comment.content}} </p>
                 <hr />
             {% endfor %}

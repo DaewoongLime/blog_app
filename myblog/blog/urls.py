@@ -9,5 +9,5 @@ urlpatterns = [
     path('write/', views.write_post, name="write-blog"),
     path('<str:user>/profile/', views.profile, name="user-profile"),
     path('<str:user>/show_all/<str:model>/', views.show_all, name="show-all"),
-    path('like/<str:model>/<int:id>/', views.like, name="like"),
+    path('like/<str:model>/<int:id>/<str:like>/', views.like, name="like"),
 ]
