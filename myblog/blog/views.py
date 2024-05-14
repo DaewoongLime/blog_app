@@ -201,3 +201,25 @@ def edit_post(request, pk):
             raise Http404("Invalid Request.")
 
     return render(request, 'write_post.html', context={'form':form})
+
+@login_required
+def edit_comment(request, pk):
+    if request.method == 'POST':
+        form = LeaveCommentForm(request.POST)
+        if form.is_valid():
+            # edit comment object and save
+            comment = Comment.objects.get(id=pk)
+            comment.content=form.cleaned_data['content']+datetime.now().strftime('\n (edited on %Y-%m-%d %H:%M)')
+            comment.save()
+        # return to show the post
+        return HttpResponseRedirect(reverse('post', args=[comment.post.id]))
+    else:
+        try:
+            c = Comment.objects.get(id=pk)
+            if request.user.username == c.writer:
+                form = LeaveCommentForm(initial={'content':c.content})
+            else: raise Http404("Invalid Request.")
+        except:
+            raise Http404("Invalid Request.")
+
+    return render(request, 'write_post.html', context={'form':form})

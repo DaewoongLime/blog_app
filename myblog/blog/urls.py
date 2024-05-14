@@ -12,5 +12,6 @@ urlpatterns = [
     path('like/<str:model>/<int:id>/<str:like>/', views.like, name="like"),
     path('search/', views.search, name="search"),
     path('<int:pk>/edit/', views.edit_post, name="edit-post"),
-    
+    path('<int:pk>/edit_comment/', views.edit_comment, name="edit-comment"),
+
 ]
