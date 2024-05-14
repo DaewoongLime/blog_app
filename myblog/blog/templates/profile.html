@@ -15,7 +15,7 @@
                 {{post.date}} ({{post.likes}})
                 </p>
                 {% if auth %}
-                    <a href="">Edit Post</a>
+                    <a href="{% url 'edit-post' post.id %}">Edit Post</a>
                     <a href="{% url 'delete' post.id 'post' %}" onclick="return confirm('Are you sure? This action is irreversible.')">Delete Post</a>
                 {% endif %}
             </div>

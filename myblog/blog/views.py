@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect, Http404
 from django.urls import reverse
 from django.views import generic
+from datetime import datetime    
 from .models import *
 from .forms import *
 
@@ -177,3 +178,26 @@ def search(request):
                     posts.append(post)
     context['posts'] = posts
     return render(request, 'search.html', context=context)
+
+@login_required
+def edit_post(request, pk):
+    if request.method == 'POST':
+        form = WritePostForm(request.POST)
+        if form.is_valid():
+            # edit post object and save
+            post = Post.objects.get(id=pk)
+            post.title = form.cleaned_data['title']
+            post.content=form.cleaned_data['content']+datetime.now().strftime('\n (edited on %Y-%m-%d %H:%M)')
+            post.save()
+        # return to show the post
+        return HttpResponseRedirect(reverse('post', args=[post.id]))
+    else:
+        try:
+            p = Post.objects.get(id=pk)
+            if request.user.username == p.writer:
+                form = WritePostForm(initial={'title':p.title, 'content':p.content})
+            else: raise Http404("Invalid Request.")
+        except:
+            raise Http404("Invalid Request.")
+
+    return render(request, 'write_post.html', context={'form':form})
