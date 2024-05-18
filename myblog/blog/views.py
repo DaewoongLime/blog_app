@@ -27,6 +27,7 @@ class PostDetailView(generic.DetailView):
         # Show only the top 5 comments sorted by number of likes
         comments.order_by('-likes')[:5]
         context['comments'] = comments
+        context['error'] = False
         # Form for adding new comments
         context['form'] = LeaveCommentForm()
         return context
@@ -34,16 +35,15 @@ class PostDetailView(generic.DetailView):
     def post(self, request, *args, **kwargs):
         if request.method == 'POST':
             form = LeaveCommentForm(request.POST)
+            id = int(self.kwargs.get('pk'))
             if form.is_valid():
-                id = int(self.kwargs.get('pk'))
                 comment = Comment(
                     post=Post.objects.get(id=id), 
                     writer=request.user, 
                     content=form.cleaned_data['content']
                     )
                 comment.save()
-
-                return HttpResponseRedirect(reverse('post', args=[id]))
+            return HttpResponseRedirect(reverse('post', args=[id]))
 
 class CommentListView(generic.ListView):
     model = Comment
@@ -52,6 +52,26 @@ class CommentListView(generic.ListView):
 
     def get_queryset(self): 
         return Comment.objects.filter(post=self.kwargs['pk'])
+    
+    def get_context_data(self, **kwargs):
+        # Inherit previous get_context_data function
+        context = super(CommentListView, self).get_context_data(**kwargs)
+        # Form for adding new comments
+        context['form'] = LeaveCommentForm()
+        return context
+    
+    def post(self, request, *args, **kwargs):
+        if request.method == 'POST':
+            form = LeaveCommentForm(request.POST)
+            id = int(self.kwargs.get('pk'))
+            if form.is_valid():
+                comment = Comment(
+                    post=Post.objects.get(id=id), 
+                    writer=request.user, 
+                    content=form.cleaned_data['content']
+                    )
+                comment.save()
+            return HttpResponseRedirect(reverse('comments', args=[id]))
 
 @login_required
 def write_post(request):

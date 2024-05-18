@@ -56,10 +56,16 @@
               {% csrf_token %}
               <button>👎 {{comment.dislikes}}</button>
             </form>
+            {% if request.user.username == comment.writer %}
+            <a href="{% url 'edit-comment' comment.id %}">Edit Comment</a>
+            <a href="{% url 'delete' comment.id 'comment' %}" onclick="return confirm('Are you sure? This action is irreversible.')">Delete Comment</a>
+            {% endif %}
           </div>
           <p></p>
         {% endfor %}
-        <p><a href="comments/">See all comments</a></p>
+        {% if comments.count > 5 %}
+          <p><a href="comments/">See all comments</a></p>
+        {% endif %}
       {% else %}
         <p>No comments yet.</p>
       {% endif %}

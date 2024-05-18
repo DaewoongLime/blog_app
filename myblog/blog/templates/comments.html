@@ -2,6 +2,31 @@
 
 {% block content %}
     <h1>Comments</h1>
+    {% if user.is_authenticated %}
+      <a href="#" class="hide">Write Comment</a>
+      {% if error %} <p style="color: red;">Comment is too long.</p> {% endif %}
+      <div>
+        <form action="" method="post" id="form" style="display: none;">
+          {% csrf_token %}
+          <table>
+          {{ form.as_table }}
+          </table>
+          <input type="submit" value="Submit">
+        </form>
+      </div>
+      <script>
+        var link = document.getElementsByClassName("hide");
+        link[0].addEventListener("click", function() {
+          if (form.style.display === "block") {
+            form.style.display = "none";
+          } else {
+            form.style.display = "block";
+          }
+        });
+      </script>
+    {% else %}
+      <a href="{% url 'login' %}">Login to Leave a Comment</a>
+    {% endif %}
     <hr />
 
     <div style="margin-left:20px;margin-top:20px;margin-right:20px;">  
@@ -19,6 +44,10 @@
                     </form>
                   </div>
                 <p> {{comment.content}} </p>
+                {% if request.user.username == comment.writer %}
+                <a href="{% url 'edit-comment' comment.id %}">Edit Comment</a>
+                <a href="{% url 'delete' comment.id 'comment' %}" onclick="return confirm('Are you sure? This action is irreversible.')">Delete Comment</a>
+                {% endif %}
                 <hr />
             {% endfor %}
         {% else %}

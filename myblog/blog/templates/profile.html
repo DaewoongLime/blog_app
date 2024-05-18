@@ -38,12 +38,12 @@
                 {% if auth %}
                 <a href="{% url 'edit-comment' comment.id %}">Edit Comment</a>
                 <a href="{% url 'delete' comment.id 'comment' %}" onclick="return confirm('Are you sure? This action is irreversible.')">Delete Comment</a>
-            {% endif %}
+                {% endif %}
             </div>
         {% endfor %}
         {% if comments.count > 5 %}
             <a href="{% url 'show-all' name 'comments' %}">See All</a>
-    {% endif %}
+        {% endif %}
     {% else %}
         <p>No comments yet.</p>
     {% endif %}
